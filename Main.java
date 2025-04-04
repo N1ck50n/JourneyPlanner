@@ -1,6 +1,8 @@
-package journey_planner;
-
-public class Main 
+public class Main
 {
-    
+    public static void main(String[] args) 
+    {
+        Input input = new Input();
+        
+    }
 }
