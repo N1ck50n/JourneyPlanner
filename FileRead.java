@@ -3,17 +3,16 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.io.IOException;
 
-public class FileRead extends Input
+public class FileRead
 {
+    ArrayList<String> startingLocations = new ArrayList<String>();
+    ArrayList<String> endingLocations = new ArrayList<String>();
+    ArrayList<String> type = new ArrayList<String>();
+    ArrayList<String> time = new ArrayList<String>();
+
     public FileRead()
     {
-        super();
 
-        ArrayList<String> startingLocations = new ArrayList<String>();
-        ArrayList<String> endingLocations = new ArrayList<String>();
-        ArrayList<String> type = new ArrayList<String>();
-        ArrayList<String> time = new ArrayList<String>();
-        
         try
         {
             BufferedReader reader = new BufferedReader(new FileReader("Metrolink_times_linecolour.csv"));    
@@ -26,7 +25,12 @@ public class FileRead extends Input
                 endingLocations.add(currentRow[1]);
                 type.add(currentRow[2]);
                 time.add(currentRow[3]);
-            }    
+            }  
+           
+            
+
+            reader.close();
+            
         }
         catch (IOException e)
         {
