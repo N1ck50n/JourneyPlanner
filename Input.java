@@ -13,11 +13,6 @@ public class Input extends FileRead
         
         Scanner scanner = new Scanner(System.in);
 
-        // The starting locations read from the file.
-        // System.out.println(startingLocations);
-
-        // The ending locations read from the file.
-        // System.out.println(endingLocations);
 
         while (firstLoc == false && secondLoc == false)
         {
