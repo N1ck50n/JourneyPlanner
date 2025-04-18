@@ -12,14 +12,14 @@ public class FileRead
     ArrayList<String> type = new ArrayList<String>();
     ArrayList<String> time = new ArrayList<String>();
 
-    HashMap<String, Integer> startLocIndexes = new HashMap<>();
-    HashMap<String, Integer> endLocIndexes = new HashMap<>();
-    HashMap<String, Integer> timeIndexes = new HashMap<>();
+    ArrayList<String> locationName = new ArrayList<>(); 
+    HashMap<String, Integer> locationIndexes = new HashMap<>();
+    ArrayList<int[]> row = new ArrayList<>();
+
+    int indexNum = 0;
+    int numLocations = 0;
 
     int[][] graph;
-    int startIndex = 0;
-    int endIndex = 0;
-    int numLocations = 0;
 
     public FileRead()
     {
@@ -36,19 +36,24 @@ public class FileRead
                 type.add(currentRow[2]);
                 time.add(currentRow[3]);
                 
-                if (startLocIndexes.containsKey(currentRow[0]) == false) 
+                if (locationIndexes.containsKey(currentRow[0]) == false) 
                 {
-                    startLocIndexes.put(currentRow[0], startIndex);
-                    startIndex++;
+                    locationName.add(currentRow[0]);
+                    locationIndexes.put(currentRow[0], indexNum);
+                    indexNum++;
                 }
-                if (endLocIndexes.containsKey(currentRow[1]) == false)
+                if (locationIndexes.containsKey(currentRow[1]) == false)
                 {
-                    endLocIndexes.put(currentRow[1], endIndex);
-                    endIndex++;
+                    locationName.add(currentRow[1]);
+                    locationIndexes.put(currentRow[1], indexNum);
+                    indexNum++;
                 }
                
-                numLocations++;
+                int startingLocationIndex = locationIndexes.get(currentRow[0]); 
+                int endingLocationIndex = locationIndexes.get(currentRow[1]); 
                 
+                row.add(new int[] {startingLocationIndex, endingLocationIndex, Integer.parseInt(currentRow[3])});
+                numLocations++;
             }  
             
             // The starting locations read from the file.
@@ -69,11 +74,14 @@ public class FileRead
     }
     public void graph()
     {
-        graph = new int[numLocations][numLocations];
+        graph = new int[locationIndexes.size()][locationIndexes.size()];
 
-        for (int i = 0; i < numLocations; i++)
+        for (int[] selectedRow : row)
         {
-            
+            int i = selectedRow[0]; 
+            int j = selectedRow[1];
+            graph[i][j] = selectedRow[2];
+            graph[j][i] = selectedRow[2];
         }
     }
 
