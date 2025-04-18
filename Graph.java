@@ -2,15 +2,25 @@
 
     public class Graph extends FileRead
     {
-        int[][] graph;   
+        locationData[][] graph;
 
-        public Graph()
+        
+        public void graph()
         {
-            graph = new int[numLocations][numLocations];
-        }
+            graph = new locationData[locationIndexes.size()][locationIndexes.size()];
 
-        public void Edges()
-        {   
+            for (int i = 0; i < startingLocations.size(); i++)
+            {
+                int startingLocationIndex = locationIndexes.get(startingLocations.get(i)); 
+                int endingLocationIndex = locationIndexes.get(endingLocations.get(i)); 
+                int timeTaken = Integer.parseInt(time.get(i));
+                String lineColor = lineType.get(i);
+
+                graph[startingLocationIndex][endingLocationIndex].time = timeTaken;
+                graph[startingLocationIndex][endingLocationIndex].color = lineColor;
+                graph[endingLocationIndex][startingLocationIndex].time = timeTaken;
+                graph[endingLocationIndex][startingLocationIndex].color = lineColor;
+            }
             
         }
     }

@@ -4,7 +4,6 @@ public class Main
     {
         Input i = new Input();
         Graph g = new Graph();
-        g.Edges();
 
     }
 }

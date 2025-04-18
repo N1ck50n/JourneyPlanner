@@ -2,24 +2,26 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.io.IOException;
 
 public class FileRead
 {
     ArrayList<String> startingLocations = new ArrayList<String>();
     ArrayList<String> endingLocations = new ArrayList<String>();
-    ArrayList<String> type = new ArrayList<String>();
+    ArrayList<String> lineType = new ArrayList<String>();
     ArrayList<String> time = new ArrayList<String>();
 
     ArrayList<String> locationName = new ArrayList<>(); 
     HashMap<String, Integer> locationIndexes = new HashMap<>();
-    ArrayList<int[]> row = new ArrayList<>();
 
     int indexNum = 0;
     int numLocations = 0;
 
-    int[][] graph;
+    class locationData
+    {
+        int time;
+        String color;
+    }
 
     public FileRead()
     {
@@ -33,7 +35,7 @@ public class FileRead
                 String[] currentRow = currentLine.split(",");
                 startingLocations.add(currentRow[0]);
                 endingLocations.add(currentRow[1]);
-                type.add(currentRow[2]);
+                lineType.add(currentRow[2]);
                 time.add(currentRow[3]);
                 
                 if (locationIndexes.containsKey(currentRow[0]) == false) 
@@ -48,11 +50,7 @@ public class FileRead
                     locationIndexes.put(currentRow[1], indexNum);
                     indexNum++;
                 }
-               
-                int startingLocationIndex = locationIndexes.get(currentRow[0]); 
-                int endingLocationIndex = locationIndexes.get(currentRow[1]); 
-                
-                row.add(new int[] {startingLocationIndex, endingLocationIndex, Integer.parseInt(currentRow[3])});
+
                 numLocations++;
             }  
             
@@ -72,17 +70,6 @@ public class FileRead
         }
         
     }
-    public void graph()
-    {
-        graph = new int[locationIndexes.size()][locationIndexes.size()];
-
-        for (int[] selectedRow : row)
-        {
-            int i = selectedRow[0]; 
-            int j = selectedRow[1];
-            graph[i][j] = selectedRow[2];
-            graph[j][i] = selectedRow[2];
-        }
-    }
+    
 
 }
