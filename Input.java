@@ -38,12 +38,12 @@ public class Input extends FileRead
             }
             if (firstLoc && secondLoc)
             {
-                System.out.println("Valid.");
+                System.out.println("Valid.\n");
                 break;
             }
             if (firstLoc == false && secondLoc == false)
             {
-                System.out.println("Invalid input.");
+                System.out.println("Invalid input.\n");
             }
         }
     

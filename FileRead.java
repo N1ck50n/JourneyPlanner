@@ -19,9 +19,11 @@ public class FileRead
 
     class locationData
     {
-        int time;
+        Double time;
         String color;
     }
+
+    locationData[][] graph;
 
     public FileRead()
     {
@@ -30,6 +32,8 @@ public class FileRead
         {
             BufferedReader reader = new BufferedReader(new FileReader("Metrolink_times_linecolour.csv"));    
             String currentLine;
+            reader.readLine();
+
             while ((currentLine = reader.readLine()) != null)
             {
                 String[] currentRow = currentLine.split(",");
@@ -50,16 +54,28 @@ public class FileRead
                     locationIndexes.put(currentRow[1], indexNum);
                     indexNum++;
                 }
-
+                
                 numLocations++;
             }  
             
-            // The starting locations read from the file.
-            //System.out.println(startingLocations);
+            // System.out.println(startingLocations.size());
+            // System.out.println(endingLocations.size());
+            // System.out.println(lineType.size());
+            // System.out.println(time.size());
+            
+            graph = new locationData[locationIndexes.size()][locationIndexes.size()];
 
-            // The ending locations read from the file.
-            //System.out.println(endingLocations);
+            for (int i = 0; i < startingLocations.size(); i++)
+            {
+                graph[locationIndexes.get(startingLocations.get(i))][locationIndexes.get(endingLocations.get(i))] = new locationData();
+                graph[locationIndexes.get(endingLocations.get(i))][locationIndexes.get(startingLocations.get(i))] = new locationData();
+             
+                graph[locationIndexes.get(startingLocations.get(i))][locationIndexes.get(endingLocations.get(i))].time = Double.parseDouble(time.get(i));
+                graph[locationIndexes.get(startingLocations.get(i))][locationIndexes.get(endingLocations.get(i))].color = lineType.get(i);
+                graph[locationIndexes.get(endingLocations.get(i))][locationIndexes.get(startingLocations.get(i))].time = Double.parseDouble(time.get(i));
+                graph[locationIndexes.get(endingLocations.get(i))][locationIndexes.get(startingLocations.get(i))].color = lineType.get(i);
 
+            }
 
             reader.close();
             
