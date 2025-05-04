@@ -1,13 +1,15 @@
 public class Output extends Pathfinding
 {
+    int currentLocationIndex = 0;
+    int nextLocationIndex = 0;
+    Double totalTime = 0.0;
+    int numOfChanges = 0;
+    String currentColor;    
+    String previousColor;
+
     public Output()
     {
         super();
-
-        for (int m = endingIndex; m != -1; m = previousLocation[m]) 
-        {
-            tripData.addFirst(m);
-        }
 
         if (timeToSource[endingIndex] == Double.MAX_VALUE) 
         {
@@ -15,14 +17,35 @@ public class Output extends Pathfinding
             return;
         }
 
+        for (int m = endingIndex; m != -1; m = previousLocation[m]) 
+        {
+            tripData.addFirst(m);
+        }
+
         System.out.println("*** Minimal Time Route ***");
-        System.out.println("shortest path from " + startLocation + " to " + endLocation + ":");
 
         for (int i = 0; i < tripData.size() - 1; i++) 
         {
-            int currentLocationIndex = tripData.get(i);
-            int nextLocationIndex = tripData.get(i + 1);
-            System.out.println(locationName.get(currentLocationIndex) + " to " + locationName.get(nextLocationIndex) + " in " + graph[currentLocationIndex][nextLocationIndex].color + " (" + graph[currentLocationIndex][nextLocationIndex].time + " mins)");
+            currentLocationIndex = tripData.get(i);
+            nextLocationIndex = tripData.get(i + 1);
+            currentColor = graph[currentLocationIndex][nextLocationIndex].color;
+
+            totalTime = totalTime + graph[currentLocationIndex][nextLocationIndex].time + 2;
+
+
+            if (previousColor != null && currentColor.equals(previousColor) == false)
+            {
+                System.out.println("** Change Line to " + currentColor + " **");
+                numOfChanges++;
+            }
+
+            System.out.println(locationName.get(nextLocationIndex) + " on " + graph[currentLocationIndex][nextLocationIndex].color);
+            
+            previousColor = graph[currentLocationIndex][nextLocationIndex].color;
         }
+
+        System.out.println();
+        System.out.println("Overall Journey Time (mins) = " + totalTime);
+        System.out.println("Number of changes = " + numOfChanges);
     }
 }

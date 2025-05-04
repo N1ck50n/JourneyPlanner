@@ -7,8 +7,8 @@ public class Pathfinding extends Input
     Double[] timeToSource;
     int[] previousLocation;
     String[] tripLineColor;
-    int startingIndex;
-    int endingIndex;
+    int startingIndex = 0;
+    int endingIndex = 0;
 
     public Pathfinding() 
     {
