@@ -11,37 +11,40 @@ public class Output extends Pathfinding
     {
         super();
 
+        // Form the path using previousLocation array by backtracking from the final destination.
+        for (int i = endingIndex; i != -1; i = previousLocation[i])
+        {
+            tripData.addFirst(i);
+        }
+
+        // Check if final destination is reachable and shortes time has been set.
         if (timeToSource[endingIndex] == Double.MAX_VALUE) 
         {
             System.out.println("It is not possible to go from  " + startLocation + " to " + endLocation);
             return;
         }
 
-        for (int m = endingIndex; m != -1; m = previousLocation[m]) 
+        System.out.println("*** Minimal Time ***");
+        for (int j = 0; j < tripData.size() - 1; j++) 
         {
-            tripData.addFirst(m);
-        }
-
-        System.out.println("*** Minimal Time Route ***");
-
-        for (int i = 0; i < tripData.size() - 1; i++) 
-        {
-            currentLocationIndex = tripData.get(i);
-            nextLocationIndex = tripData.get(i + 1);
+            currentLocationIndex = tripData.get(j);
+            nextLocationIndex = tripData.get(j + 1);
             currentColor = graph[currentLocationIndex][nextLocationIndex].color;
 
-            totalTime = totalTime + graph[currentLocationIndex][nextLocationIndex].time + 2;
+            totalTime = totalTime + graph[currentLocationIndex][nextLocationIndex].time; 
 
 
-            if (previousColor != null && currentColor.equals(previousColor) == false)
+            if (previousColor != null && currentColor.equals(previousColor) == false) // If next color is different then current color.
             {
                 System.out.println("** Change Line to " + currentColor + " **");
+                totalTime = totalTime + 2; // Add time taken to switch trams.
                 numOfChanges++;
             }
 
-            System.out.println(locationName.get(nextLocationIndex) + " on " + graph[currentLocationIndex][nextLocationIndex].color);
+            System.out.println(locationName.get(nextLocationIndex) + " on " + graph[currentLocationIndex][nextLocationIndex].color + graph[currentLocationIndex][nextLocationIndex].time);
             
-            previousColor = graph[currentLocationIndex][nextLocationIndex].color;
+            // save the current color as previous for comparing with the next tram line color.
+            previousColor = graph[currentLocationIndex][nextLocationIndex].color; 
         }
 
         System.out.println();
