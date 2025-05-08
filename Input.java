@@ -40,7 +40,7 @@ public class Input extends FileRead
                 System.out.println("Would you like to choose the shortest path or the path with the fewest changes?");
                 System.out.println("(Type 1 for shortest path and 2 for fewest changes) ");
                 pathfindingType = Integer.parseInt(scanner.nextLine());
-
+        
                 break;
             }
             if (firstLoc == false || secondLoc == false)

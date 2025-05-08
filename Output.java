@@ -24,9 +24,17 @@ public class Output extends Pathfinding
             return;
         }
 
-        System.out.println("*** Minimal Time ***");
-        // Print the first location and the trip color should be the line color for the second location.
-        System.out.println(locationName.get(startingIndex) + " on " + tripLineColor[tripData.get(1)]);
+        if (pathfindingType == 1)
+        {
+            System.out.println("*** Minimal Time ***");
+        }
+        if (pathfindingType == 2)
+        {
+            System.out.println("*** Route with Fewest Changes ***");
+        }
+        
+        // Print the first location and the trip color should be the line color used to go to the second location.
+        System.out.println(locationName.get(startingIndex) + " on " + tripLineColor[tripData.get(1)] + " line");
 
         for (int j = 0; j < tripData.size() - 1; j++) 
         {
@@ -49,11 +57,12 @@ public class Output extends Pathfinding
             if (previousColor != null && !currentColor.equals(previousColor)) // If next color is different then current color.
             {
                 System.out.println("** Change Line to " + currentColor + " **");
+                System.out.println(locationName.get(currentLocationIndex) + " on " + currentColor + " line");
                 bestTime = bestTime + 2;
                 numOfChanges++;
             }
 
-            System.out.println(locationName.get(nextLocationIndex) + " on " + currentColor);
+            System.out.println(locationName.get(nextLocationIndex) + " on " + currentColor + " line");
             
             totalTime = totalTime + bestTime;
             // save the current color as previous for comparing with the next tram line color.
