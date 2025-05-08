@@ -1,6 +1,6 @@
 import java.util.LinkedList;
 
-public class Pathfinding extends Input 
+public class Pathfinding extends FileRead
 {
     boolean[] visited; //Stores nodes that are already visited and their shortest distance has been found.
     LinkedList<Integer> tripData; //Stores the locations in order to reach the final destination.
@@ -13,9 +13,8 @@ public class Pathfinding extends Input
     Double newTime = 0.0; //Temporary variable used to check for possible new times.
     int minimumChanges = Integer.MAX_VALUE; //temporary variable that will store the min changes to compare in the loop.
 
-    public Pathfinding() 
+    public Pathfinding(String startLocation, String endLocation, int pathfindingType) 
     {
-        super();
         visited = new boolean[indexNum];
         tripData = new LinkedList<>();
         timeToSource = new Double[indexNum];
@@ -151,6 +150,22 @@ public class Pathfinding extends Input
                 }
             }
         }
+
+        // Form the path using previousLocation array by backtracking from the final location.
+        for (int i = endingIndex; i != -1; i = previousLocation[i])
+        {
+            tripData.addFirst(i);
+        }
+
+        // Check if final destination is reachable and if a shortest time has been set.
+        if (timeToSource[endingIndex] == Double.MAX_VALUE) 
+        {
+            System.out.println("It is not possible to go from  " + startLocation + " to " + endLocation);
+            return;
+        }
+
+        Output result = new Output(pathfindingType, startingIndex, tripData, tripLineColor);
+        
 
         // for (int i = 0; i < indexNum; i++) 
         // {
