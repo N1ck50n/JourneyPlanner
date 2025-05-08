@@ -11,6 +11,7 @@ public class Pathfinding extends Input
     int startingIndex = 0; //Index of initial location.
     int endingIndex = 0; //Index of final destination.
     Double newTime = 0.0; //Temporary variable used to check for possible new times.
+    int minimumChanges = Integer.MAX_VALUE; //temporary variable that will store the min changes to compare in the loop.
 
     public Pathfinding() 
     {
@@ -127,22 +128,23 @@ public class Pathfinding extends Input
                             // Go over all the different types of ways to go to the same location and choose the best route.
                             for (locationData bestWay : graph[next][n])
                             {
-                                int numChanges = numofLineChanges[next];
-
-                                // If the next trips color is different the current trip add 1.
+                                newTime = timeToSource[next] + bestWay.time;
+                                int numChanges = numofLineChanges[next];                                
+                                
                                 if (tripLineColor[next] != null && !tripLineColor[next].equals(bestWay.color))
                                 {
-                                    numChanges = numofLineChanges[next] + 1;
-                                    bestWay.time = bestWay.time + 2.0;
+                                    numChanges++;
+                                    newTime = newTime + 2;
                                 }
 
                                 if (numChanges < numofLineChanges[n]) // Check if the new path has fewer changes.
                                 {
                                     numofLineChanges[n] = numChanges;
-                                    timeToSource[n] = timeToSource[next] + bestWay.time;
+                                    timeToSource[n] = newTime;
                                     tripLineColor[n] = bestWay.color;
                                     previousLocation[n] = next;
                                 }
+
                             }
                         }
                     }  

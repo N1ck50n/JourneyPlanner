@@ -3,7 +3,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.IOException;
-import java.util.ArrayList;
+
 
 public class FileRead
 {
@@ -32,7 +32,7 @@ public class FileRead
         {
             BufferedReader reader = new BufferedReader(new FileReader("Metrolink_times_linecolour.csv"));    
             String currentLine; // Temporary String that stores the current line, as it inputs line by line.
-            reader.readLine();
+            reader.readLine(); // Put it before the loop so you can skip the first line.
 
             while ((currentLine = reader.readLine()) != null) // Until line is empty.
             {
