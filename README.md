@@ -1,4 +1,4 @@
-# journey_planner by Nickson
+# Metrolink Journey Planner 
 
 # To Compile and Run the program
     1. Compile using: javac *java

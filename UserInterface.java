@@ -30,7 +30,7 @@ public class UserInterface extends FileRead
         askEndLoc.setFont(new Font("TimesRoman", Font.PLAIN, 16));
         panel.add(askEndLoc);
         panel.add(endingInput);
-        shortestPathButton.setFont(new Font("TimesRoman", Font.PLAIN, 16));
+        shortestPathButton.setFont(new Font("TimesRoman", Font.PLAIN, 16)); 
         panel.add(shortestPathButton);
         fewestChangesButton.setFont(new Font("TimesRoman", Font.PLAIN, 16));
         panel.add(fewestChangesButton);
@@ -45,7 +45,8 @@ public class UserInterface extends FileRead
 
     }
 
-    public void inputSubmitted(int pathfindingType)
+    // executes when the buttons are clicked and pathfindingType is used to determine which button is clicked.
+    public void inputSubmitted(int pathfindingType) 
     {
         startLocation = startingInput.getText();
         endLocation = endingInput.getText();
