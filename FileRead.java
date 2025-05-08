@@ -3,6 +3,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class FileRead
 {
@@ -22,7 +23,7 @@ public class FileRead
         String color;
     }
 
-    locationData[][] graph;
+    ArrayList<locationData>[][] graph;
 
     public FileRead()
     {
@@ -62,19 +63,30 @@ public class FileRead
             // System.out.println(lineType.size());
             // System.out.println(time.size());
             
-            graph = new locationData[locationIndexes.size()][locationIndexes.size()]; //2D array of the defined locationData data type. 
+            graph = new ArrayList[indexNum][indexNum]; // Instantiate the whole 2D array implementation. 
 
             for (int i = 0; i < startingLocations.size(); i++)
             {
-                graph[locationIndexes.get(startingLocations.get(i))][locationIndexes.get(endingLocations.get(i))] = new locationData();
-                graph[locationIndexes.get(endingLocations.get(i))][locationIndexes.get(startingLocations.get(i))] = new locationData();
-             
-                //Store the values from file into the graph.
-                graph[locationIndexes.get(startingLocations.get(i))][locationIndexes.get(endingLocations.get(i))].time = Double.parseDouble(time.get(i));
-                graph[locationIndexes.get(startingLocations.get(i))][locationIndexes.get(endingLocations.get(i))].color = lineType.get(i);
-                graph[locationIndexes.get(endingLocations.get(i))][locationIndexes.get(startingLocations.get(i))].time = Double.parseDouble(time.get(i));
-                graph[locationIndexes.get(endingLocations.get(i))][locationIndexes.get(startingLocations.get(i))].color = lineType.get(i);
+                // Instantiate each node
+                if (graph[locationIndexes.get(startingLocations.get(i))][locationIndexes.get(endingLocations.get(i))] == null)
+                {
+                    graph[locationIndexes.get(startingLocations.get(i))][locationIndexes.get(endingLocations.get(i))] = new ArrayList<>(); 
+                }
+                
+                if (graph[locationIndexes.get(endingLocations.get(i))][locationIndexes.get(startingLocations.get(i))] == null)
+                {
+                    graph[locationIndexes.get(endingLocations.get(i))][locationIndexes.get(startingLocations.get(i))] = new ArrayList<>();
+                }
+                
+                locationData forward = new locationData(); // Create an object of the class to store the forward data.
+                forward.time = Double.parseDouble(time.get(i));
+                forward.color = lineType.get(i);
+                graph[locationIndexes.get(startingLocations.get(i))][locationIndexes.get(endingLocations.get(i))].add(forward);
 
+                locationData reversed = new locationData(); // Create an object to store the reversed data.
+                reversed.time = Double.parseDouble(time.get(i));
+                reversed.color = lineType.get(i);
+                graph[locationIndexes.get(endingLocations.get(i))][locationIndexes.get(startingLocations.get(i))].add(reversed);
             }
 
             reader.close(); //close the scanner 

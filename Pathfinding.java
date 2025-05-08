@@ -10,6 +10,7 @@ public class Pathfinding extends Input
     int[] previousLocation; //Stores the previous location of the index's location.
     int startingIndex = 0; //Index of initial location.
     int endingIndex = 0; //Index of final destination.
+    Double newTime = 0.0; //Temporary variable used to check for possible new times.
 
     public Pathfinding() 
     {
@@ -35,6 +36,7 @@ public class Pathfinding extends Input
 
         timeToSource[startingIndex] = 0.0;
         numofLineChanges[startingIndex] = 0;
+        
 
         if (pathfindingType == 1) //Shortest path option.
         {
@@ -53,8 +55,8 @@ public class Pathfinding extends Input
                         }  
                     }
                 }
-
-                if (next == -1 || timeToSource[next] == Double.MAX_VALUE) //if time is infinite, break from the loop.
+                // If time is still infinite break from the loop, the node is unreachable.
+                if (next == -1 || timeToSource[next] == Double.MAX_VALUE)
                 {
                     break;
                 }
@@ -69,12 +71,22 @@ public class Pathfinding extends Input
                     {
                         if (graph[next][n] != null) //Check if you can go from next to n.
                         {
-                            double newTime = timeToSource[next] + graph[next][n].time;
-                            if (newTime < timeToSource[n]) 
+                            // Go over all the different types of ways to go to the same location and choose the shortest time.
+                            for (locationData shortestWay : graph[next][n])
                             {
-                                timeToSource[n] = newTime;
-                                tripLineColor[n] = graph[next][n].color;
-                                previousLocation[n] = next;
+                                newTime = timeToSource[next] + shortestWay.time;
+                            
+                                if (tripLineColor[next] != null && !tripLineColor[next].equals(shortestWay.color)) // Add 2 mins if you have to change trams.
+                                {
+                                    newTime = newTime + 2.0;
+                                }
+
+                                if (newTime < timeToSource[n]) 
+                                {
+                                    timeToSource[n] = newTime;
+                                    tripLineColor[n] = shortestWay.color;
+                                    previousLocation[n] = next;
+                                }
                             }
                         }
                     }
@@ -112,24 +124,25 @@ public class Pathfinding extends Input
                     {
                         if (graph[next][n] != null)
                         {
-                            int numChanges;
-                            
-                            // If the next trips color is different the current trip add 1.
-                            if (tripLineColor[next] != null && !tripLineColor[next].equals(graph[next][n].color))
+                            // Go over all the different types of ways to go to the same location and choose the best route.
+                            for (locationData bestWay : graph[next][n])
                             {
-                                numChanges = numofLineChanges[next] + 1;
-                            }
-                            else
-                            {
-                                numChanges = numofLineChanges[next];
-                            }
-                            
-                            if (numChanges < numofLineChanges[n]) // Check if new path would have lower changes.
-                            {
-                                numofLineChanges[n] = numChanges;
-                                timeToSource[n] = timeToSource[next] + graph[next][n].time;
-                                tripLineColor[n] = graph[next][n].color;
-                                previousLocation[n] = next;
+                                int numChanges = numofLineChanges[next];
+
+                                // If the next trips color is different the current trip add 1.
+                                if (tripLineColor[next] != null && !tripLineColor[next].equals(bestWay.color))
+                                {
+                                    numChanges = numofLineChanges[next] + 1;
+                                    bestWay.time = bestWay.time + 2.0;
+                                }
+
+                                if (numChanges < numofLineChanges[n]) // Check if the new path has fewer changes.
+                                {
+                                    numofLineChanges[n] = numChanges;
+                                    timeToSource[n] = timeToSource[next] + bestWay.time;
+                                    tripLineColor[n] = bestWay.color;
+                                    previousLocation[n] = next;
+                                }
                             }
                         }
                     }  
