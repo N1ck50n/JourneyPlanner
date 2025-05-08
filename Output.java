@@ -1,40 +1,50 @@
-public class Output extends Pathfinding
+import javax.swing.*;
+import java.awt.*;
+import java.util.LinkedList;
+
+public class Output extends FileRead
 {
-    int currentLocationIndex = 0;
+    
+    JFrame outputFrame = new JFrame("Best Route for the Chosen Option");
+    JPanel outputPanel = new JPanel();
+    FlowLayout outputLayout = new FlowLayout();
+    JTextArea outputArea = new JTextArea(50, 30);
+    JScrollPane scrollPane = new JScrollPane(outputArea);
+
+    int currentLocationIndex;
     int nextLocationIndex = 0;
     Double totalTime = 0.0;
     int numOfChanges = 0;
     String currentColor;    
     String previousColor;
 
-    public Output()
-    {
-        super();
+    public Output(int pathfindingType, int startingIndex, LinkedList<Integer> tripData, String[] tripLineColor) 
+    {           
+    
+        outputPanel.setLayout(new BorderLayout()); //Use borderlayout.
+        outputPanel.add(scrollPane, BorderLayout.CENTER);
+        outputArea.setFont(new Font("TimesRoman", Font.PLAIN, 16));
 
-        // Form the path using previousLocation array by backtracking from the final destination.
-        for (int i = endingIndex; i != -1; i = previousLocation[i])
-        {
-            tripData.addFirst(i);
-        }
+        outputFrame.setContentPane(outputPanel);
+        outputFrame.setSize(500, 500);
+        outputFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        outputFrame.setVisible(true);
 
-        // Check if final destination is reachable and if a shortest time has been set.
-        if (timeToSource[endingIndex] == Double.MAX_VALUE) 
-        {
-            System.out.println("It is not possible to go from  " + startLocation + " to " + endLocation);
-            return;
-        }
 
+        StringBuilder output = new StringBuilder();
+        
         if (pathfindingType == 1)
         {
-            System.out.println("*** Minimal Time ***");
+            output.append("*** Minimal Time Route ***\n");
+
         }
         if (pathfindingType == 2)
         {
-            System.out.println("*** Route with Fewest Changes ***");
+            output.append("*** Route with Fewest Changes ***\n");
         }
         
         // Print the first location and the trip color should be the line color used to go to the second location.
-        System.out.println(locationName.get(startingIndex) + " on " + tripLineColor[tripData.get(1)] + " line");
+        output.append(locationName.get(startingIndex) + " on " + tripLineColor[tripData.get(1)] + " line\n"); 
 
         for (int j = 0; j < tripData.size() - 1; j++) 
         {
@@ -56,21 +66,25 @@ public class Output extends Pathfinding
 
             if (previousColor != null && !currentColor.equals(previousColor)) // If next color is different then current color.
             {
-                System.out.println("** Change Line to " + currentColor + " **");
-                System.out.println(locationName.get(currentLocationIndex) + " on " + currentColor + " line");
+                output.append("** Change Line to " + currentColor + " **\n");
+                output.append(locationName.get(currentLocationIndex) + " on " + currentColor + " line\n");
                 bestTime = bestTime + 2;
                 numOfChanges++;
             }
 
-            System.out.println(locationName.get(nextLocationIndex) + " on " + currentColor + " line");
+            output.append(locationName.get(nextLocationIndex) + " on " + currentColor + " line\n");
             
             totalTime = totalTime + bestTime;
             // save the current color as previous for comparing with the next tram line color.
             previousColor = currentColor;
         }
 
-        System.out.println();
-        System.out.println("Overall Journey Time (mins) = " + totalTime);
-        System.out.println("Number of changes = " + numOfChanges);
+        output.append("\n");
+        output.append("Overall Journey Time (mins) = " + totalTime + "\n");
+        output.append("Number of changes = " + numOfChanges + "\n");
+        
+        outputArea.setText(output.toString()); //use JtextArea to print the ouput
+
+        
     }
 }
